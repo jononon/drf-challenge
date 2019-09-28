@@ -1,0 +1,81 @@
+<html>
+	<head>
+		<script
+		src="https://code.jquery.com/jquery-3.4.1.min.js"
+		integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+		crossorigin="anonymous"></script>
+		<script src="p5.min.js"></script>
+		<script src="p5.sound.min.js"></script>
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+	</head>
+	<body>
+		<input id="code">
+		<button onclick="connect()">Click to start listening!</button>
+		<div>
+			<div id=aaa></div>
+		</div>
+	</body>
+	<script src="https://drf-eng-app-2019.herokuapp.com/socket.io/socket.io.js"></script>
+
+    <script>
+    	var socket = io('https://drf-eng-app-2019.herokuapp.com/');
+
+    	function connect () {
+    		var roomCode = $("#code").val();
+    		socket.emit('join', ""+roomCode);
+    	}
+
+		function setup () {
+			createCanvas(windowWidth, windowHeight);
+			noLoop();
+		}
+
+		var mostRecentMessage;
+
+		function draw () {
+			var trimmedSpectrum = mostRecentMessage.trimmedSpectrum;
+
+			var circleRadius = mostRecentMessage.circleRadius;
+			var circleCenterX = 300;
+			var circleCenterY = 300;
+			var minLineLength = mostRecentMessage.minLineLength;
+			var amplitudeCoefficient = mostRecentMessage.amplitudeCoefficient;
+			var circleNumberDots = trimmedSpectrum.length;
+
+			background(255);
+
+			function lineGetStartXCoordinateForDot (i) {
+				return Math.sin(2*Math.PI*(i/circleNumberDots))*circleRadius+circleCenterX;
+			}
+
+			function lineGetStartYCoordinateForDot (i) {
+				return Math.cos(2*Math.PI*(i/circleNumberDots))*circleRadius+circleCenterY;
+			}
+
+			function lineGetEndXCoordinateForDot (i, lineLength) {
+				return Math.sin(2*Math.PI*(i/circleNumberDots))*(circleRadius+lineLength*amplitudeCoefficient+minLineLength)+circleCenterX;
+			}
+
+			function lineGetEndYCoordinateForDot (i, lineLength) {
+				return Math.cos(2*Math.PI*(i/circleNumberDots))*(circleRadius+lineLength*amplitudeCoefficient+minLineLength)+circleCenterY;
+			}
+
+			for(var i = 0; i<circleNumberDots; i++) {
+				line(lineGetStartXCoordinateForDot(i), lineGetStartYCoordinateForDot(i), lineGetEndXCoordinateForDot(i, trimmedSpectrum[i]), lineGetEndYCoordinateForDot(i, trimmedSpectrum[i]));
+			}
+		}
+
+		function mousePressed() { getAudioContext().resume() }
+
+		function windowResized() {
+			resizeCanvas(windowWidth, windowHeight);
+		}
+
+		socket.on('message', function (message) {
+			mostRecentMessage = message;
+			loop();
+		});
+    </script>
+</html>

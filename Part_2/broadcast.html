@@ -1,0 +1,80 @@
+<html>
+	<head>
+		<script
+		src="https://code.jquery.com/jquery-3.4.1.min.js"
+		integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+		crossorigin="anonymous"></script>
+		<script src="p5.min.js"></script>
+		<script src="p5.sound.min.js"></script>
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+	</head>
+	<body>
+		<button onclick="startBroadcast()">Click to start broadcasting!</button>
+		<div>
+			<div id=code></div>
+		</div>
+	</body>
+	<script src="https://drf-eng-app-2019.herokuapp.com/socket.io/socket.io.js"></script>
+
+    <script>
+    	var socket = io('https://drf-eng-app-2019.herokuapp.com/');
+    	var roomCode;
+
+    	function startBroadcast () {
+    		roomCode = Math.floor(100000 + Math.random() * 900000);
+    		$("#code").html(roomCode);
+    		socket.emit('join', ""+roomCode);
+    		audioStart();
+    	}
+    	
+		var mic;
+		var fft;
+
+		function setup () {
+			noLoop();
+		}
+
+		function audioStart() {
+			mic = new p5.AudioIn();
+			mic.start();
+			fft = new p5.FFT(0.8);
+			fft.setInput(mic);
+			loop();
+		}
+
+		var count5 = 0;
+		function draw () {
+			var vol = mic.getLevel();
+			var spectrum = fft.analyze();
+
+			var lowestFrequencyBucket = spectrum.length*0.1;
+			var highestFrequencyBucket = spectrum.length*0.40;
+
+			var trimmedSpectrum = spectrum.slice(lowestFrequencyBucket, highestFrequencyBucket);
+
+			var circleRadius = 200;
+			var circleCenterX = 300;
+			var circleCenterY = 300;
+			var minLineLength = 5;
+			var amplitudeCoefficient = 2;
+			var circleNumberDots = trimmedSpectrum.length;
+
+			var message = {
+				circleRadius: circleRadius,
+				minLineLength: minLineLength,
+				amplitudeCoefficient: amplitudeCoefficient,
+				trimmedSpectrum: trimmedSpectrum
+			};
+			if(count5 == 0) {
+				socket.emit('message', message);
+			} else if (count5 == 5) {
+				count5 = -1;
+			}
+			count5++;
+		}
+
+		function mousePressed() { getAudioContext().resume() }
+    </script>
+</html>
