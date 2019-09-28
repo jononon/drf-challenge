@@ -1,0 +1,90 @@
+<html>
+	<head>
+		<script
+		src="https://code.jquery.com/jquery-3.4.1.min.js"
+		integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+		crossorigin="anonymous"></script>
+		<script src="p5.min.js"></script>
+		<script src="sketch.js"></script>
+	</head>
+	<body>
+		<button onclick="goAudio()">Test</button>
+		<!-- <canvas id="canvas"></canvas> -->
+		<div id="aaa"></div>
+		<input id="volume" type="range" min="0" max="1" step="0.1" value="0.5"/>
+	</body>
+	<!-- <script>
+
+		function resizeCanvas() {
+			var windowWidth = $(window).width();
+			var windowHeight = $(window).height();
+			$("#canvas").attr("width", windowWidth);
+			$("#canvas").attr("height", windowHeight);
+		}
+
+		var c = document.getElementById("canvas");
+		resizeCanvas();
+		var ctx = c.getContext("2d");
+		ctx.beginPath();
+		ctx.arc(95, 50, 40, 0, 2 * Math.PI);
+		ctx.stroke();
+
+
+		$(window).resize(function () {
+			resizeCanvas()
+		});
+
+		var processor;
+		var  dataArray;
+		async function goAudio () {
+			const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+			// const audioContext = new AudioContext();
+
+			const constraints = {
+			  audio: true,
+			  video: false
+			};
+
+			try {
+		    	var stream = await navigator.mediaDevices.getUserMedia(constraints);
+				
+				console.log("Succeeded in capturing audio stream.");
+				console.log(stream);
+				
+				var streamSource = audioContext.createMediaStreamSource(stream);
+
+				var processor = audioContext.createScriptProcessor(512);
+
+				var analyser = audioContext.createAnalyser();
+				analyser.fftSize = 128;
+				dataArray = new Float32Array(analyser.frequencyBinCount)
+
+				streamSource.connect(analyser);
+				analyser.connect(audioContext.destination);
+
+				
+				analyser.getFloatTimeDomainData(dataArray);
+				$("#aaa").html(dataArray.toString());
+			} catch(err) {
+				console.log("Failed to capture audio stream.");
+			}
+			
+			
+		}
+
+		function audioStreamAcquired (stream) {
+			console.log("Succeeded in capturing audio stream.");
+			console.log(stream);
+
+			var streamSource = audioContext.createMediaStreamSource(stream);
+			
+
+
+		}
+
+		function audioStreamFailed () {
+			console.log("Failed to capture audio stream.");
+		}
+	</script> -->
+</html>
