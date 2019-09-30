@@ -3,6 +3,7 @@ This project completes both parts of the [2019 DRF Engineer-in-Residence Coding 
 
 ## Part 1
 Part 1 can be viewed at https://jonathandamico.me/drf-challenge/Part_1
+
 Once you've reached the website, click start to display a circle which will react to audio from your computer's microphone.
 
 Once the demo has started, play with the volume slider to adjust how reactive the circle is to your computer's microphone.
