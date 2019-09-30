@@ -11,13 +11,9 @@
 		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 	</head>
 	<body>
-		<div style="position: fixed;margin:5px;display: none;" id=controller>
-			<label for="volume">Volume</label>
-			<input type="range" class="custom-range" id="volume" min="0" max="5" value="2" step="0.1">
-		</div>
 		<div class=container style="margin-top:30px" id=intro>
 			<div class="jumbotron">
-				<p class="lead">This demo picks up microphone input in one browser window and visualises it in another browser window.</p>
+				<p class="lead">This demo picks up microphone input in one browser window and visualizes it in another browser window.</p>
 				<hr class="my-4">
 				<p>To begin, press the start button.</p>
 				<p>Once broadcasting has started, the demo will generate a six-digit code which can be used to receive the broadcast in a different window.</p>
@@ -26,6 +22,12 @@
 					<button class="btn btn-primary" onclick="startBroadcast()">Click to start broadcasting!</button>
 					<div>
 						<div id=code></div>
+					</div>
+				</p>
+				<p>
+					<div id=slider style="display:none;">
+						<label for="volume">Volume</label>
+						<input type="range" class="custom-range" id="volume" min="0" max="5" value="2" step="0.1">
 					</div>
 				</p>
 			</div>
@@ -40,7 +42,8 @@
 
     	function startBroadcast () {
     		roomCode = Math.floor(100000 + Math.random() * 900000);
-    		$("#code").html("Audio is being broadcasted!<br>The broadcast ID is <b>" + roomCode + "</b>.<br>Open <a href=https://go.jdami.co/drf-listen?id="+roomCode+" target='_blank'>https://go.jdami.co/drf-listen</a> in a new window (both pages need to be visible) and enter the broadcast ID to visualise." );
+    		$("#code").html("Audio is being broadcasted!<br>The broadcast ID is <b>" + roomCode + "</b>.<br>Open <a href=https://go.jdami.co/drf-listen?id="+roomCode+" target='_blank'>https://go.jdami.co/drf-listen</a> in a new window (both pages need to be visible) and enter the broadcast ID to visualize." );
+    		$("#slider").show();
     		socket.emit('join', ""+roomCode);
     		audioStart();
     	}
@@ -74,7 +77,7 @@
 			var circleCenterX = 300;
 			var circleCenterY = 300;
 			var minLineLength = 5;
-			var amplitudeCoefficient = 2;
+			var amplitudeCoefficient = $("#volume").val();
 			var circleNumberDots = trimmedSpectrum.length;
 
 			var message = {
