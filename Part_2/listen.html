@@ -24,6 +24,9 @@
 	<script src="https://drf-eng-app-2019.herokuapp.com/socket.io/socket.io.js"></script>
 
     <script>
+    	if (location.protocol != 'https:'){
+			location.href = 'https:' + window.location.href.substring(window.location.protocol.length);
+		}
     	var socket = io('https://drf-eng-app-2019.herokuapp.com/');
 
     	function connect () {
