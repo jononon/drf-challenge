@@ -9,9 +9,11 @@ function setup () {
 function audioStart() {
 	mic = new p5.AudioIn();
 	mic.start();
-	fft = new p5.FFT(0.8);
+	fft = new p5.FFT(0.8,1024);
 	fft.setInput(mic);
 	loop();
+	$("#intro").hide();
+	$("#controller").show();
 }
 
 function draw () {
@@ -24,10 +26,10 @@ function draw () {
 	var trimmedSpectrum = spectrum.slice(lowestFrequencyBucket, highestFrequencyBucket);
 
 	var circleRadius = 200;
-	var circleCenterX = 300;
-	var circleCenterY = 300;
+	var circleCenterX = windowWidth/2;
+	var circleCenterY = windowHeight/2;
 	var minLineLength = 5;
-	var amplitudeCoefficient = 2;
+	var amplitudeCoefficient = $("#volume").val();
 	var circleNumberDots = trimmedSpectrum.length;
 
 	background(255);

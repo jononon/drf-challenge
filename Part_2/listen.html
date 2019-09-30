@@ -11,10 +11,14 @@
 		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 	</head>
 	<body>
-		<input id="code">
-		<button onclick="connect()">Click to start listening!</button>
-		<div>
-			<div id=aaa></div>
+		<div style="position: fixed;margin:5px;">
+			<label for="code">Enter broadcast ID:</label>
+			<input id="code" class="form-control">
+			<br>
+			<button class="btn btn-primary" onclick="connect()">Click to start listening!</button>
+			<div>
+				<div id=aaa></div>
+			</div>
 		</div>
 	</body>
 	<script src="https://drf-eng-app-2019.herokuapp.com/socket.io/socket.io.js"></script>
@@ -38,8 +42,8 @@
 			var trimmedSpectrum = mostRecentMessage.trimmedSpectrum;
 
 			var circleRadius = mostRecentMessage.circleRadius;
-			var circleCenterX = 300;
-			var circleCenterY = 300;
+			var circleCenterX = windowWidth/2;
+			var circleCenterY = windowHeight/2;
 			var minLineLength = mostRecentMessage.minLineLength;
 			var amplitudeCoefficient = mostRecentMessage.amplitudeCoefficient;
 			var circleNumberDots = trimmedSpectrum.length;
