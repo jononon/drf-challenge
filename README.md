@@ -17,7 +17,7 @@ After clicking the button on the page to start broadcasting, the page will give 
 
 ## Libraries Used
 
-[jQuery](https://jquery.com/)
-[p5.js](https://p5js.org/)
-[Bootstrap](https://getbootstrap.com/)
-[socket.io](https://socket.io/)
+- [jQuery](https://jquery.com/)
+- [p5.js](https://p5js.org/)
+- [Bootstrap](https://getbootstrap.com/)
+- [socket.io](https://socket.io/)
